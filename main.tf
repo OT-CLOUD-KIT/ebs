@@ -22,9 +22,20 @@ data "aws_subnet" "id" {
 }
 
 resource "aws_ebs_volume" "additional" {
-  count             = var.secondary_ebs_volumes != null ? length(var.secondary_ebs_volumes) : 0
-  availability_zone = data.aws_subnet.id[0].availability_zone
-  size              = var.secondary_ebs_volumes[count.index].volume_size
+  count                = var.secondary_ebs_volumes != null ? length(var.secondary_ebs_volumes) : 0
+  availability_zone    = data.aws_subnet.id[0].availability_zone
+  size                 = var.secondary_ebs_volumes[count.index].volume_size
+  encrypted            = var.secondary_ebs_volumes[count.index].encrypted
+  kms_key_id           = var.secondary_ebs_volumes[count.index].kms_key_id
+  final_snapshot       = var.secondary_ebs_volumes[count.index].final_snapshot
+  multi_attach_enabled = var.secondary_ebs_volumes[count.index].multi_attach_enabled
+  iops                 = var.secondary_ebs_volumes[count.index].iops
+  throughput           = var.secondary_ebs_volumes[count.index].throughput
+  type                 = var.secondary_ebs_volumes[count.index].type
+  snapshot_id          = var.secondary_ebs_volumes[count.index].snapshot_id
+  outpost_arn          = var.secondary_ebs_volumes[count.index].outpost_arn
+  tags                 = var.secondary_ebs_volumes[count.index].tags
+
 }
 
 resource "aws_volume_attachment" "ebs" {
